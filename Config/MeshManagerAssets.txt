@@ -1,0 +1,6 @@
+Dragon
+Z:\Projects\PAGLearningProject\Resources\Meshes\Dragon.fbx
+Bunny
+Z:\Projects\PAGLearningProject\Resources\Meshes\Bunny.fbx
+Katana
+Z:\Projects\PAGLearningProject\Resources\Meshes\Katana.fbx

@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+/.vs
+*.filters
+*.user
+/x64
+/x86
+*/x64
+*/x86
+/packages

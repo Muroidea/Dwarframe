@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Direct3D.DXC.1.8.2407.12\build\native\Microsoft.Direct3D.DXC.props" Condition="Exists('..\packages\Microsoft.Direct3D.DXC.1.8.2407.12\build\native\Microsoft.Direct3D.DXC.props')" />
+  <Import Project="..\packages\Microsoft.Direct3D.D3D12.1.614.1\build\native\Microsoft.Direct3D.D3D12.props" Condition="Exists('..\packages\Microsoft.Direct3D.D3D12.1.614.1\build\native\Microsoft.Direct3D.D3D12.props')" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{6848bb8d-76e9-47b5-8117-65e7db7301a9}</ProjectGuid>
+    <RootNamespace>Dwarframe</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;DX12_FRAMEWORK_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Dwarframe/Source;$(SolutionDir)/Dwarframe/Vendors;$(SolutionDir)/Dwarframe/Vendors/NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075/Aftermath;$(SolutionDir)/Dwarframe/Vendors/Assimp/include/;$(SolutionDir)/Dwarframe/Vendors/FreeImage/include/</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <EnforceTypeConversionRules>
+      </EnforceTypeConversionRules>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>assimp-vc143-mt.lib;FreeImage.lib;d3d12.lib;dxgi.lib;dxguid.lib;dxcompiler.lib;GFSDK_Aftermath_Lib.x64.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Dwarframe\Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\lib\x64;$(SolutionDir)\Dwarframe\Vendors\;$(SolutionDir)\Dwarframe\Vendors\Assimp\lib\x64\;$(SolutionDir)\Dwarframe\Vendors\FreeImage\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;DX12_FRAMEWORK_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Dwarframe/Source;$(SolutionDir)/Dwarframe/Vendors;$(SolutionDir)/Dwarframe/Vendors/NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075/Aftermath;$(SolutionDir)/Dwarframe/Vendors/Assimp/include/;$(SolutionDir)/Dwarframe/Vendors/FreeImage/include/</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <EnforceTypeConversionRules>
+      </EnforceTypeConversionRules>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>assimp-vc143-mt.lib;FreeImage.lib;d3d12.lib;dxgi.lib;dxguid.lib;dxcompiler.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Dwarframe\Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\lib\x64;$(SolutionDir)\Dwarframe\Vendors\;$(SolutionDir)\Dwarframe\Vendors\Assimp\lib\x64\;$(SolutionDir)\Dwarframe\Vendors\FreeImage\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Dwarframe\Common\Camera.h" />
+    <ClInclude Include="Source\Dwarframe\Common\Clock.h" />
+    <ClInclude Include="Source\Dwarframe\Editor\Editor.h" />
+    <ClInclude Include="Source\Dwarframe\Editor\EditorExtender.h" />
+    <ClInclude Include="Source\Dwarframe\Gameplay\Components\Component.h" />
+    <ClInclude Include="Source\Dwarframe\Gameplay\Entity.h" />
+    <ClInclude Include="Source\Dwarframe\Gameplay\World.h" />
+    <ClInclude Include="Source\Dwarframe\Helpers\Alignments.h" />
+    <ClInclude Include="Source\Dwarframe\Helpers\MeshLoader.h" />
+    <ClInclude Include="Source\Dwarframe\Helpers\Paths.h" />
+    <ClInclude Include="Source\Dwarframe\Helpers\ShaderCompiler.h" />
+    <ClInclude Include="Source\Dwarframe\Helpers\SimpleMeshGenerator.h" />
+    <ClInclude Include="Source\Dwarframe\Helpers\TextureLoader.h" />
+    <ClInclude Include="Source\Dwarframe\Core.h" />
+    <ClInclude Include="Source\Dwarframe\GameManager.h" />
+    <ClInclude Include="Source\Dwarframe.h" />
+    <ClInclude Include="Source\Dwarframe\EntryPoint.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\DXContext.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\Debug\DXDebugLayer.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\GPUResources\Buffer.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\GPUResources\GPUResourceBase.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\GPUResources\Shader.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\GPUResources\Texture2D.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\GPUResources\UploadBuffer.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\HardwareBridge\GraphicsBridge.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\Pipeline\DescriptorHeap.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\Pipeline\DescriptorTable.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\Pipeline\MaterialProxy.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\Pipeline\PipelineState.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\Pipeline\RootSignature.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\RenderPasses\BaseRenderPass.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\RenderPasses\Renderable.h" />
+    <ClInclude Include="Source\Dwarframe\Renderer\RenderPasses\RenderPass.h" />
+    <ClInclude Include="Source\Dwarframe\Resources\Managers\MaterialManager.h" />
+    <ClInclude Include="Source\Dwarframe\Resources\Managers\MeshManager.h" />
+    <ClInclude Include="Source\Dwarframe\Resources\Managers\ResourceManager.h" />
+    <ClInclude Include="Source\Dwarframe\Resources\Managers\TextureManager.h" />
+    <ClInclude Include="Source\Dwarframe\Resources\Material.h" />
+    <ClInclude Include="Source\Dwarframe\Resources\Mesh.h" />
+    <ClInclude Include="Source\Dwarframe\Resources\GameAsset.h" />
+    <ClInclude Include="Source\Dwarframe\Window.h" />
+    <ClInclude Include="Source\pch.h" />
+    <ClInclude Include="Source\Dwarframe\Resources\Texture.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\aabb.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\ai_assert.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\anim.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Base64.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\BaseImporter.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Bitmap.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\BlobIOSystem.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\ByteSwapper.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\camera.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\cexport.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\cfileio.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\cimport.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\ColladaMetaData.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\color4.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\commonMetaData.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Compiler\poppack1.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Compiler\pstdint.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Compiler\pushpack1.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\config.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\CreateAnimMesh.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\DefaultIOStream.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\DefaultIOSystem.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\DefaultLogger.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\defs.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Exceptional.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Exporter.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\fast_atof.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\GenericProperty.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\GltfMaterial.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Hash.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Importer.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\importerdesc.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\IOStream.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\IOStreamBuffer.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\IOSystem.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\light.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\LineSplitter.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\LogAux.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Logger.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\LogStream.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\material.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\MathFunctions.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\matrix3x3.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\matrix4x4.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\MemoryIOWrapper.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\mesh.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\metadata.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\NullLogger.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\ObjMaterial.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\ParsingUtils.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\pbrmaterial.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\port\AndroidJNI\AndroidJNIIOSystem.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\port\AndroidJNI\BundledAssetIOSystem.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\postprocess.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Profiler.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\ProgressHandler.hpp" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\qnan.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\quaternion.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\RemoveComments.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\scene.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\SceneCombiner.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\SGSpatialSort.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\SkeletonMeshBuilder.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\SmallVector.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\SmoothingGroups.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\SpatialSort.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\StandardShapes.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\StreamReader.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\StreamWriter.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\StringComparison.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\StringUtils.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Subdivision.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\texture.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\TinyFormatter.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\types.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\vector2.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\vector3.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\version.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\Vertex.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\XmlParser.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\XMLTools.h" />
+    <ClInclude Include="Vendors\Assimp\include\assimp\ZipArchiveIOSystem.h" />
+    <ClInclude Include="Vendors\ImGUI\imconfig.h" />
+    <ClInclude Include="Vendors\ImGUI\imgui.h" />
+    <ClInclude Include="Vendors\ImGUI\imgui_impl_dx12.h" />
+    <ClInclude Include="Vendors\ImGUI\imgui_impl_win32.h" />
+    <ClInclude Include="Vendors\ImGUI\imgui_internal.h" />
+    <ClInclude Include="Vendors\ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="Vendors\ImGUI\imstb_textedit.h" />
+    <ClInclude Include="Vendors\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Vendors\meshoptimizer\src\meshoptimizer.h" />
+    <ClInclude Include="Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\Aftermath\GFSDK_Aftermath.h" />
+    <ClInclude Include="Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\Aftermath\GFSDK_Aftermath_Defines.h" />
+    <ClInclude Include="Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\Aftermath\GFSDK_Aftermath_GpuCrashDump.h" />
+    <ClInclude Include="Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\Aftermath\GFSDK_Aftermath_GpuCrashDumpDecoding.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Dwarframe\Common\Camera.cpp" />
+    <ClCompile Include="Source\Dwarframe\Common\Clock.cpp" />
+    <ClCompile Include="Source\Dwarframe\Core.cpp" />
+    <ClCompile Include="Source\Dwarframe\Editor\Editor.cpp" />
+    <ClCompile Include="Source\Dwarframe\Gameplay\Components\Component.cpp" />
+    <ClCompile Include="Source\Dwarframe\Gameplay\Entity.cpp" />
+    <ClCompile Include="Source\Dwarframe\Gameplay\World.cpp" />
+    <ClCompile Include="Source\Dwarframe\Helpers\MeshLoader.cpp" />
+    <ClCompile Include="Source\Dwarframe\Helpers\ShaderCompiler.cpp" />
+    <ClCompile Include="Source\Dwarframe\Helpers\SimpleMeshGenerator.cpp" />
+    <ClCompile Include="Source\Dwarframe\Helpers\TextureLoader.cpp" />
+    <ClCompile Include="Source\Dwarframe\GameManager.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\Debug\DXDebugLayer.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\DXContext.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\GPUResources\Buffer.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\GPUResources\GPUResourceBase.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\GPUResources\Shader.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\GPUResources\Texture2D.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\GPUResources\UploadBuffer.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\HardwareBridge\GraphicsBridge.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\Pipeline\DescriptorHeap.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\Pipeline\DescriptorTable.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\Pipeline\MaterialProxy.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\Pipeline\PipelineState.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\Pipeline\RootSignature.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\RenderPasses\BaseRenderPass.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\RenderPasses\Renderable.cpp" />
+    <ClCompile Include="Source\Dwarframe\Renderer\RenderPasses\RenderPass.cpp" />
+    <ClCompile Include="Source\Dwarframe\Resources\Managers\MaterialManager.cpp" />
+    <ClCompile Include="Source\Dwarframe\Resources\Managers\MeshManager.cpp" />
+    <ClCompile Include="Source\Dwarframe\Resources\Managers\ResourceManager.cpp" />
+    <ClCompile Include="Source\Dwarframe\Resources\Managers\TextureManager.cpp" />
+    <ClCompile Include="Source\Dwarframe\Resources\Material.cpp" />
+    <ClCompile Include="Source\Dwarframe\Resources\Mesh.cpp" />
+    <ClCompile Include="Source\Dwarframe\Resources\GameAsset.cpp" />
+    <ClCompile Include="Source\Dwarframe\Window.cpp" />
+    <ClCompile Include="Source\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Source\Dwarframe\Resources\Texture.cpp" />
+    <ClCompile Include="Vendors\ImGUI\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\ImGUI\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\ImGUI\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\ImGUI\imgui_impl_dx12.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\ImGUI\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\ImGUI\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\ImGUI\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\allocator.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\clusterizer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\indexcodec.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\indexgenerator.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\overdrawanalyzer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\overdrawoptimizer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\quantization.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\simplifier.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\spatialorder.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\stripifier.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\vcacheanalyzer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\vcacheoptimizer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\vertexcodec.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\vertexfilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\vfetchanalyzer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Vendors\meshoptimizer\src\vfetchoptimizer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Dwarframe\Shaders\MeshPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Source\Dwarframe\Shaders\MeshShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Mesh</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Mesh</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.5</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.5</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Source\Dwarframe\Shaders\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Source\Dwarframe\Shaders\RootSignature.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">rootsig_1.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">rootsig_1.1</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ROOTSIG</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ROOTSIG</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RootSignature</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RootSignature</ShaderType>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Source\Dwarframe\Shaders\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Source\Dwarframe\Shaders\Common.hlsli" />
+    <None Include="Vendors\Assimp\include\assimp\color4.inl" />
+    <None Include="Vendors\Assimp\include\assimp\material.inl" />
+    <None Include="Vendors\Assimp\include\assimp\matrix3x3.inl" />
+    <None Include="Vendors\Assimp\include\assimp\matrix4x4.inl" />
+    <None Include="Vendors\Assimp\include\assimp\quaternion.inl" />
+    <None Include="Vendors\Assimp\include\assimp\SmoothingGroups.inl" />
+    <None Include="Vendors\Assimp\include\assimp\vector2.inl" />
+    <None Include="Vendors\Assimp\include\assimp\vector3.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\directxmesh_desktop_win10.2024.9.5.1\build\native\directxmesh_desktop_win10.targets" Condition="Exists('..\packages\directxmesh_desktop_win10.2024.9.5.1\build\native\directxmesh_desktop_win10.targets')" />
+    <Import Project="..\packages\Microsoft.Direct3D.D3D12.1.614.1\build\native\Microsoft.Direct3D.D3D12.targets" Condition="Exists('..\packages\Microsoft.Direct3D.D3D12.1.614.1\build\native\Microsoft.Direct3D.D3D12.targets')" />
+    <Import Project="..\packages\Microsoft.Direct3D.DXC.1.8.2407.12\build\native\Microsoft.Direct3D.DXC.targets" Condition="Exists('..\packages\Microsoft.Direct3D.DXC.1.8.2407.12\build\native\Microsoft.Direct3D.DXC.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\directxmesh_desktop_win10.2024.9.5.1\build\native\directxmesh_desktop_win10.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxmesh_desktop_win10.2024.9.5.1\build\native\directxmesh_desktop_win10.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Direct3D.D3D12.1.614.1\build\native\Microsoft.Direct3D.D3D12.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Direct3D.D3D12.1.614.1\build\native\Microsoft.Direct3D.D3D12.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Direct3D.D3D12.1.614.1\build\native\Microsoft.Direct3D.D3D12.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Direct3D.D3D12.1.614.1\build\native\Microsoft.Direct3D.D3D12.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Direct3D.DXC.1.8.2407.12\build\native\Microsoft.Direct3D.DXC.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Direct3D.DXC.1.8.2407.12\build\native\Microsoft.Direct3D.DXC.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Direct3D.DXC.1.8.2407.12\build\native\Microsoft.Direct3D.DXC.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Direct3D.DXC.1.8.2407.12\build\native\Microsoft.Direct3D.DXC.targets'))" />
+  </Target>
+</Project>
