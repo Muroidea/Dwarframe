@@ -117,11 +117,11 @@ namespace Dwarframe {
         struct MeshData
         {
             // TODO:  We should use float* and store all data in one big buffer
-            std::vector<DirectX::XMFLOAT3> m_Positions;
-            std::vector<DirectX::XMFLOAT3> m_Normals;
-            std::vector<DirectX::XMFLOAT2> m_UVs;
-            std::vector<DirectX::XMFLOAT3> m_Tangents;
-            std::vector<DirectX::XMFLOAT3> m_Bitangents;
+            std::vector<XMFLOAT3> m_Positions;
+            std::vector<XMFLOAT3> m_Normals;
+            std::vector<XMFLOAT2> m_UVs;
+            std::vector<XMFLOAT3> m_Tangents;
+            std::vector<XMFLOAT3> m_Bitangents;
             std::vector<Buffer*> m_AttributeBuffers;
             
             std::vector<uint32_t> m_Indices;
@@ -132,13 +132,13 @@ namespace Dwarframe {
         {
 		    struct MeshletVertex
 		    {
-			    DirectX::XMFLOAT3 Position;
-			    DirectX::XMFLOAT3 Normal;
-			    DirectX::XMFLOAT2 UV0;
+			    XMFLOAT3 Position;
+			    XMFLOAT3 Normal;
+			    XMFLOAT2 UV0;
 		    };
 
-            std::vector<DirectX::Meshlet> m_Meshlets;
-            std::vector<DirectX::MeshletTriangle> m_MeshletTriangles;
+            std::vector<Meshlet> m_Meshlets;
+            std::vector<MeshletTriangle> m_MeshletTriangles;
             std::vector<uint32_t> m_VertexIndices;
 		    std::vector<MeshletVertex> m_Vertices;
 
@@ -252,15 +252,15 @@ namespace Dwarframe {
         inline size_t GenNumOfVertices(uint32_t SubmeshID) const { return m_Submeshes[SubmeshID].m_Positions.size(); }
 
         inline uint32_t GetVerticesDataSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].Vertices.size() * sizeof(Submesh::MeshletVertex); }
-        inline uint32_t GetMeshletTrianglesSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_MeshletTriangles.size() * sizeof(DirectX::MeshletTriangle); }
+        inline uint32_t GetMeshletTrianglesSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_MeshletTriangles.size() * sizeof(MeshletTriangle); }
         inline uint32_t GetUniqueIndicesSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_VertexIndices.size() * sizeof(uint8_t); }
-        inline uint32_t GetMeshletsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Meshlets.size() * sizeof(DirectX::Meshlet); }
+        inline uint32_t GetMeshletsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Meshlets.size() * sizeof(Meshlet); }
         
-        inline uint32_t GetPositionsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Positions.size() * sizeof(DirectX::XMFLOAT3); }
-        inline uint32_t GetNormalsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Normals.size() * sizeof(DirectX::XMFLOAT3); }
-        inline uint32_t GetUVsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_UVs.size() * sizeof(DirectX::XMFLOAT2); }
-        inline uint32_t GetTangentsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Tangents.size() * sizeof(DirectX::XMFLOAT3); }
-        inline uint32_t GetBitangentsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Bitangents.size() * sizeof(DirectX::XMFLOAT3); }
+        inline uint32_t GetPositionsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Positions.size() * sizeof(XMFLOAT3); }
+        inline uint32_t GetNormalsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Normals.size() * sizeof(XMFLOAT3); }
+        inline uint32_t GetUVsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_UVs.size() * sizeof(XMFLOAT2); }
+        inline uint32_t GetTangentsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Tangents.size() * sizeof(XMFLOAT3); }
+        inline uint32_t GetBitangentsSizeInBytes(uint32_t SubmeshIndex) const { return m_Submeshes[SubmeshIndex].m_Bitangents.size() * sizeof(XMFLOAT3); }
 
         inline uint32_t GetIndicesSizeInBytes() const { return m_Indices.size() * sizeof(uint32_t); }
 
@@ -273,11 +273,11 @@ namespace Dwarframe {
             //std::vector<uint32_t>
 
             // TODO:  We should use float* and store all data in one big buffer
-            std::vector<DirectX::XMFLOAT3> m_Positions;
-            std::vector<DirectX::XMFLOAT3> m_Normals;
-            std::vector<DirectX::XMFLOAT2> m_UVs;
-            std::vector<DirectX::XMFLOAT3> m_Tangents;
-            std::vector<DirectX::XMFLOAT3> m_Bitangents;
+            std::vector<XMFLOAT3> m_Positions;
+            std::vector<XMFLOAT3> m_Normals;
+            std::vector<XMFLOAT2> m_UVs;
+            std::vector<XMFLOAT3> m_Tangents;
+            std::vector<XMFLOAT3> m_Bitangents;
             
             std::vector<Buffer*> m_AttributeBuffers;
 
@@ -285,14 +285,14 @@ namespace Dwarframe {
             uint32_t m_IndicesOffset;
             uint32_t m_IndicesCount;
 
-            std::vector<DirectX::MeshletTriangle> m_MeshletTriangles;
+            std::vector<MeshletTriangle> m_MeshletTriangles;
             std::vector<uint32_t> m_VertexIndices;
-            std::vector<DirectX::Meshlet> m_Meshlets;
+            std::vector<Meshlet> m_Meshlets;
             
 		    struct MeshletVertex
 		    {
-			    DirectX::XMFLOAT3 Position;
-			    DirectX::XMFLOAT3 Normal;
+			    XMFLOAT3 Position;
+			    XMFLOAT3 Normal;
 		    };
 		    std::vector<MeshletVertex> Vertices;
 
@@ -383,8 +383,8 @@ namespace Dwarframe {
         virtual bool LoadAsset() override;
         virtual bool SaveAsset() override;
         
-#ifdef WITH_EDITOR
-		virtual void RenderOptions() override;
+#if WITH_EDITOR
+		virtual void RenderProperties() override;
 #endif
 
         uint8 GetNumOfSubmeshes() const { return m_SubmeshList.size(); }

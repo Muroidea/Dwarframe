@@ -159,10 +159,10 @@ namespace Dwarframe {
 		{
 			// Information acquired from reflection
 			std::string_view m_Name;
-			uint8 m_BindPoint {};
-			uint8 m_Space{};
-			EResourceType m_Type {};
 			D3D12_SHADER_VISIBILITY m_Visibility;
+			uint8 m_BindPoint {};
+			uint8 m_Space {};
+			EResourceType m_Type {};
 
 			// Assigned during RootSignature creation
 			//CRootParam mRP;

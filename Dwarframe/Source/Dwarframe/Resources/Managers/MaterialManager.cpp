@@ -25,10 +25,10 @@ namespace Dwarframe {
 		return true;
 	}
 	
-#ifdef WITH_EDITOR
-	bool MaterialManager::Extends(std::string ElementName)
+#if WITH_EDITOR
+	bool MaterialManager::Extends(std::string_view ElementName)
 	{
-		return true;
+		return EditorNames::ContentWindow == ElementName;
 	}
 
 	void MaterialManager::RenderOptions()
@@ -46,7 +46,7 @@ namespace Dwarframe {
 		{
 			if (AddResource(Paths::GetResourcesDir().append(NewAssetName), NewAssetName))
 			{
-				LoadResultInfo = "Material created successfuly.";
+				LoadResultInfo = "Material created successfully.";
 			}
 			else
 			{
@@ -64,7 +64,7 @@ namespace Dwarframe {
 
 		for (auto& Entry : m_Resources)
 		{
-			ResourceList.emplace_back(Entry.second->m_AssetName, "Material", Entry.second->m_AssetPath, Entry.second->m_AssetSize, Entry.second, Entry.second);
+			ResourceList.emplace_back(Entry.second->m_AssetName, "Material", Entry.second->m_AssetPath, Entry.second->m_AssetSize, Entry.second);
 		}
 	}
 #endif

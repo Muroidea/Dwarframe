@@ -15,7 +15,7 @@ namespace Dwarframe {
 			Indices.reserve(NumOfIndices);
 		}
 
-		inline void AddVertex(DirectX::XMFLOAT3 Position, DirectX::XMFLOAT3 Normal, DirectX::XMFLOAT2 UV, DirectX::XMFLOAT3 TangentU)
+		inline void AddVertex(XMFLOAT3 Position, XMFLOAT3 Normal, XMFLOAT2 UV, XMFLOAT3 TangentU)
 		{
 			Positions.push_back(Position);
 			Normals.push_back(Normal);
@@ -36,18 +36,18 @@ namespace Dwarframe {
 		inline void* GetTangentUsData()		{ return TangentUs.data(); }
 		inline void* GetIndicesData()		{ return Indices.data(); }
 
-		inline uint64 GetPositionsSize() const		{ return Positions.size() * sizeof(DirectX::XMFLOAT3); }
-		inline uint64 GetNormalsSize() const		{ return Normals.size() * sizeof(DirectX::XMFLOAT3); }
-		inline uint64 GetUVsSize() const	 		{ return UVs.size() * sizeof(DirectX::XMFLOAT2); }
-		inline uint64 GetTangaentUsSize() const		{ return TangentUs.size() * sizeof(DirectX::XMFLOAT3); }
+		inline uint64 GetPositionsSize() const		{ return Positions.size() * sizeof(XMFLOAT3); }
+		inline uint64 GetNormalsSize() const		{ return Normals.size() * sizeof(XMFLOAT3); }
+		inline uint64 GetUVsSize() const	 		{ return UVs.size() * sizeof(XMFLOAT2); }
+		inline uint64 GetTangaentUsSize() const		{ return TangentUs.size() * sizeof(XMFLOAT3); }
 		inline uint64 GetIndicesSize() const		{ return Indices.size() * sizeof(uint32); }
 
 		inline uint64 GetSizeInBytes() const		{ return GetPositionsSize() + GetNormalsSize() + GetUVsSize() + GetTangaentUsSize() + GetIndicesSize(); }
 
-		std::vector<DirectX::XMFLOAT3> Positions;
-		std::vector<DirectX::XMFLOAT3> Normals;
-		std::vector<DirectX::XMFLOAT2> UVs;
-		std::vector<DirectX::XMFLOAT3> TangentUs;
+		std::vector<XMFLOAT3> Positions;
+		std::vector<XMFLOAT3> Normals;
+		std::vector<XMFLOAT2> UVs;
+		std::vector<XMFLOAT3> TangentUs;
 
 		std::vector<uint32> Indices;
 	};

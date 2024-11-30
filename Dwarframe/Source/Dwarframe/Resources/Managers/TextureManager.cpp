@@ -52,13 +52,10 @@ namespace Dwarframe {
 
 	}
 	
-#ifdef WITH_EDITOR
-	bool TextureManager::Extends(std::string ElementName)
+#if WITH_EDITOR
+	bool TextureManager::Extends(std::string_view ElementName)
 	{
-		if (ElementName == EditorNames::LeftWindow)
-		{
-			return true;
-		}
+		return EditorNames::ContentWindow == ElementName;
 	}
 
 	void TextureManager::RenderOptions()
@@ -79,7 +76,7 @@ namespace Dwarframe {
 		{
 			if (AddResource(NewAssetPath, NewAssetName))
 			{
-				LoadResultInfo = "Texture loaded successfuly.";
+				LoadResultInfo = "Texture loaded successfully.";
 			}
 			else
 			{
@@ -98,7 +95,7 @@ namespace Dwarframe {
 
 		for (auto& Entry : m_Resources)
 		{
-			ResourceList.emplace_back(Entry.second->m_AssetName, "Texture", Entry.second->m_AssetPath, Entry.second->m_AssetSize, Entry.second, Entry.second);
+			ResourceList.emplace_back(Entry.second->m_AssetName, "Texture", Entry.second->m_AssetPath, Entry.second->m_AssetSize, Entry.second);
 		}
 	}
 #endif

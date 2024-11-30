@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "BaseRenderPass.h"
 
-#include "Dwarframe/Window.h"
+#include "Dwarframe/Core/Window.h"
 #include "Dwarframe/Renderer/DXContext.h"
 #include "Dwarframe/Renderer/GPUResources/Buffer.h"
 #include "Dwarframe/Renderer/GPUResources/UploadBuffer.h"
@@ -21,7 +21,9 @@ namespace Dwarframe {
 		m_MeshConstantsBuffer = new Buffer(DXDevice, GetSizeBufferAligned(sizeof(MeshConstants)), L"BaseRenderPass_ConstantBuffer", D3D12_RESOURCE_STATE_COMMON);
 		AdjustBarriers(4);
 
+#if WITH_EDITOR
 		ImGUIEditor::Get().RegisterEditorExtender(this);
+#endif
 	}
 
 	BaseRenderPass::~BaseRenderPass()
@@ -52,28 +54,33 @@ namespace Dwarframe {
 			return;
 		}
 
-		// Remove renderable from this entity if exists and all associated data
+		RenderPass::AddRenderable(InRenderable);
+
+		//if (!InRenderable->GetMesh()->IsLoadedGPU())
+		{
+			m_PrimitivesToUpload.push_back(InRenderable);
+		}
+
+		bUpdateTransforms = true;
+	}
+
+	void BaseRenderPass::RemoveRenderable(Renderable* InRenderable)
+	{
 		for (uint32 i = 0; i < m_Renderables.size(); i++)
 		{
-			if (m_Renderables[i]->GetRelatedEntity() == InRenderable->GetRelatedEntity())
+			if (m_Renderables[i] == InRenderable)
 			{
-				m_Renderables.erase(m_Renderables.begin() + i);
-
 				m_PipelineStates.erase(m_PipelineStates.begin() + i);
 				m_MeshVerticesBuffer.erase(m_MeshVerticesBuffer.begin() + i);
 				m_MeshletTrianglesBuffer.erase(m_MeshletTrianglesBuffer.begin() + i);
 				m_MeshletVertexIndicesBuffer.erase(m_MeshletVertexIndicesBuffer.begin() + i);
 				m_MeshletsBuffer.erase(m_MeshletsBuffer.begin() + i);
 
+				m_Renderables.erase(m_Renderables.begin() + i);
+				bUpdateTransforms = true;
+
 				break;
 			}
-		}
-
-		RenderPass::AddRenderable(InRenderable);
-
-		//if (!InRenderable->GetMesh()->IsLoadedGPU())
-		{
-			m_PrimitivesToUpload.push_back(InRenderable);
 		}
 	}
 
@@ -85,8 +92,14 @@ namespace Dwarframe {
         D3D12_VIEWPORT Viewport {};
         Viewport.TopLeftX = 0.0f;
         Viewport.TopLeftY = 0.0f;
-        Viewport.Width = Window::Get().GetWindowWidth();
-        Viewport.Height = Window::Get().GetWindowHeight();
+#if WITH_EDITOR
+		// TODO: Calculate space between docked windows.
+		Viewport.Width = Window::Get().GetWindowWidth();
+		Viewport.Height = Window::Get().GetWindowHeight();
+#else
+		Viewport.Width = Window::Get().GetWindowWidth();
+		Viewport.Height = Window::Get().GetWindowHeight();
+#endif
         Viewport.MinDepth = D3D12_MIN_DEPTH;
         Viewport.MaxDepth = D3D12_MAX_DEPTH;
         CommandList->RSSetViewports(1, &Viewport);
@@ -103,7 +116,8 @@ namespace Dwarframe {
 			CommandList->SetPipelineState(m_PipelineStates[i].GetPipelineState());
 			CommandList->SetGraphicsRootSignature(m_Renderables[i]->GetMaterial()->GetRootSignature());
 			
-			CommandList->SetGraphicsRootConstantBufferView(0, m_MeshConstantsBuffer->GetGPUVirtualAddress());
+			CommandList->SetGraphicsRoot32BitConstant(0, i, 0);
+			CommandList->SetGraphicsRootConstantBufferView(3, m_MeshConstantsBuffer->GetGPUVirtualAddress());
 			BindMeshletData(i);
 			CommandList->DispatchMesh(m_Renderables[i]->GetMesh()->GetSubmesh(0).Meshlets.size(), 1, 1);
 		}
@@ -142,8 +156,7 @@ namespace Dwarframe {
 		}
 
 		m_PrimitivesToUpload.clear();
-
-
+		/*
 		// Update projection matrix.
 		XMMATRIX ProjectionMatrix = XMMatrixIdentity();
 		if (bEnableProjectionMatrix)
@@ -158,17 +171,27 @@ namespace Dwarframe {
 		{
 			ViewMatrix = XMMatrixLookAtLH(EyePosition, TargetPoint, UpDirection);
 		}
-
-		// Update object constants
+		*/
 		XMMATRIX WorldMatrix;
-		WorldMatrix = XMMatrixScalingFromVector(Scale);
-		WorldMatrix *= XMMatrixRotationAxis(RotationAxis, XMConvertToRadians(RotationAngle));
-		WorldMatrix *= XMMatrixTranslationFromVector(Translation);
-
-		XMStoreFloat4x4(&m_MeshConstants.World, XMMatrixTranspose(WorldMatrix));
-		XMStoreFloat4x4(&m_MeshConstants.WorldView, XMMatrixTranspose(WorldMatrix * ViewMatrix));
-		XMStoreFloat4x4(&m_MeshConstants.WorldViewProj, XMMatrixTranspose(WorldMatrix * ViewMatrix * ProjectionMatrix));
-		m_MeshConstants.DrawMeshlets = false;
+		for (uint32 Id = 0; Id < m_Renderables.size(); Id++)
+		{
+			//if (m_Renderables[Id]->GetRelatedEntity()->IsTransformDirty() || bUpdateTransforms)
+			/* 
+			{
+				WorldMatrix = m_Renderables[Id]->GetRelatedEntity()->GetTransformMatrix();
+				XMStoreFloat4x4(&m_MeshConstants.World[Id], XMMatrixTranspose(WorldMatrix));
+				XMStoreFloat4x4(&m_MeshConstants.WorldView[Id], XMMatrixTranspose(WorldMatrix * ViewMatrix));
+				XMStoreFloat4x4(&m_MeshConstants.WorldViewProj[Id], XMMatrixTranspose(WorldMatrix * ViewMatrix * ProjectionMatrix));
+			}*/
+			{
+				WorldMatrix = m_Renderables[Id]->GetRelatedEntity()->GetTransformMatrix();
+				XMStoreFloat4x4(&m_MeshConstants.World[Id], XMMatrixTranspose(WorldMatrix));
+				XMStoreFloat4x4(&m_MeshConstants.WorldView[Id], XMMatrixTranspose(WorldMatrix * m_ViewMatrix));
+				XMStoreFloat4x4(&m_MeshConstants.WorldViewProj[Id], XMMatrixTranspose(WorldMatrix * m_ViewMatrix * m_ProjectionMatrix));
+			}
+		}
+		m_MeshConstants.DrawMeshlets = m_ShadingVariant;
+		//bUpdateTransforms = false;
 		/*
 		FillTransitionBarrierToNewState_UnSafe(m_MeshConstantsBuffer, D3D12_RESOURCE_STATE_COPY_DEST);
 		ResourceBarrier();
@@ -246,8 +269,8 @@ namespace Dwarframe {
 		delete m_UploadBuffer;
 		m_UploadBuffer = new UploadBuffer(DXContext::Device(), GetSizeAligned(m_UploadBufferSize, (uint32)D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT), L"BaseRenderPass_UploadBuffer");
 	}
-
-	bool BaseRenderPass::Extends(std::string ElementName)
+#if WITH_EDITOR
+	bool BaseRenderPass::Extends(std::string_view ElementName)
 	{
 		return ElementName == EditorNames::LeftWindow;
 	}
@@ -259,16 +282,38 @@ namespace Dwarframe {
 			return;
 		}
 
-		float Max = std::numeric_limits<float>::max();
-		/*
-		ImGui::NewLine();
-
-		ImGui::Text("Dupa:");
-		ImGui::InputInt("NumOfMeshletsToRender", &NumOfMeshletsToRender);
+		constexpr float Max = std::numeric_limits<float>::max();
 		
+		ImGui::NewLine();
+
+		std::vector<const char*> Items = {
+			"Meshlet Color",
+			"Vertex Color",
+			"Textures"
+		};
+
+		const char* PreviewValue = Items[m_ShadingVariant];
+		if (ImGui::BeginCombo("ShadingVariant",  PreviewValue, 0))
+		{
+			for (int ID = 0; ID < Items.size(); ID++)
+			{
+				const bool IsSelected = (m_ShadingVariant == ID);
+				if (ImGui::Selectable(Items[ID], IsSelected))
+				{
+					m_ShadingVariant = ID;
+				}
+
+				if (IsSelected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+
+			ImGui::EndCombo();
+		}
 
 		ImGui::NewLine();
-		ImGui::Separator();*/
+		ImGui::Separator();
 		ImGui::NewLine();
 
 		ImGui::Text("Projection matrix config:");
@@ -290,18 +335,8 @@ namespace Dwarframe {
 		ImGui::DragFloat3("UpDirection", (float*) & UpDirection, 1.0f, 0.0f, 1.0f);
 
 		ImGui::NewLine();
-		ImGui::Separator();
-		ImGui::NewLine();
-
-		ImGui::Text("Model matrix config:");
-		ImGui::DragFloat3("Scale", (float*)&Scale, 0.05f, 0.0f, Max);
-		ImGui::DragFloat3("RotationAxis", (float*)&RotationAxis, 0.1f, -1.0f, 1.0f);
-		ImGui::DragFloat("RotationAngle", &RotationAngle, 1.0f, -Max, Max);
-		ImGui::DragFloat3("Translation", (float*)&Translation, 0.1f, -Max, Max);
-
-		ImGui::NewLine();
 	}
-
+#endif
 	void BaseRenderPass::AdjustBarriers(uint32 NewElements)
 	{
 		if (m_Barriers.size() < m_LastFreeBarrier + NewElements)
@@ -338,27 +373,27 @@ namespace Dwarframe {
 		uint64 SizeInBytes;
 		std::wstring DebugName;
 
-		SizeInBytes = GetSizeBufferAligned(InSubmesh.NumOfVertices * InSubmesh.Attributes.GetVertexStrideInBytes());
+		SizeInBytes = InSubmesh.NumOfVertices * InSubmesh.Attributes.GetVertexStrideInBytes();
 		DebugName = L"MeshVerticesBuffer";
-		m_MeshVerticesBuffer.push_back(new Buffer(Device, SizeInBytes, DebugName));
+		m_MeshVerticesBuffer.push_back(new Buffer(Device, GetSizeBufferAligned(SizeInBytes), DebugName));
 		m_UploadBuffer->SubmitDataToUpload(m_MeshVerticesBuffer.back(), &InSubmesh.MeshVertices[0], SizeInBytes);
 		
 
-		SizeInBytes = GetSizeBufferAligned(InSubmesh.Meshlets.size() * sizeof(Submesh::Meshlet));
+		SizeInBytes = InSubmesh.Meshlets.size() * sizeof(Submesh::Meshlet);
 		DebugName = L"MeshletsBuffer";
-		m_MeshletsBuffer.push_back(new Buffer(Device, SizeInBytes, DebugName));
+		m_MeshletsBuffer.push_back(new Buffer(Device, GetSizeBufferAligned(SizeInBytes), DebugName));
 		m_UploadBuffer->SubmitDataToUpload(m_MeshletsBuffer.back(), reinterpret_cast<void*>(InSubmesh.Meshlets.data()), SizeInBytes);
 
 
-		SizeInBytes = GetSizeBufferAligned(InSubmesh.MeshletVertexIndices.size() * sizeof(uint32));
+		SizeInBytes = InSubmesh.MeshletVertexIndices.size() * sizeof(uint32);
 		DebugName = L"MeshletVertexIndicesBuffer";
-		m_MeshletVertexIndicesBuffer.push_back(new Buffer(Device, SizeInBytes, DebugName));
+		m_MeshletVertexIndicesBuffer.push_back(new Buffer(Device, GetSizeBufferAligned(SizeInBytes), DebugName));
 		m_UploadBuffer->SubmitDataToUpload(m_MeshletVertexIndicesBuffer.back(), reinterpret_cast<void*>(InSubmesh.MeshletVertexIndices.data()), SizeInBytes);
 
 
-		SizeInBytes = GetSizeBufferAligned(InSubmesh.MeshletTriangles.size() * sizeof(Submesh::MeshletTriangle));
+		SizeInBytes = InSubmesh.MeshletTriangles.size() * sizeof(Submesh::MeshletTriangle);
 		DebugName = L"MeshletTrianglesBuffer";
-		m_MeshletTrianglesBuffer.push_back(new Buffer(Device, SizeInBytes, DebugName));
+		m_MeshletTrianglesBuffer.push_back(new Buffer(Device, GetSizeBufferAligned(SizeInBytes), DebugName));
 		m_UploadBuffer->SubmitDataToUpload(m_MeshletTrianglesBuffer.back(), reinterpret_cast<void*>(InSubmesh.MeshletTriangles.data()), SizeInBytes);
 	}
 
@@ -368,8 +403,8 @@ namespace Dwarframe {
 
 		CommandList->SetGraphicsRootShaderResourceView(1, m_MeshVerticesBuffer[BufferID]->GetGPUVirtualAddress());
 		CommandList->SetGraphicsRootShaderResourceView(2, m_MeshletsBuffer[BufferID]->GetGPUVirtualAddress());
-		CommandList->SetGraphicsRootShaderResourceView(3, m_MeshletVertexIndicesBuffer[BufferID]->GetGPUVirtualAddress());
-		CommandList->SetGraphicsRootShaderResourceView(4, m_MeshletTrianglesBuffer[BufferID]->GetGPUVirtualAddress());
+		CommandList->SetGraphicsRootShaderResourceView(4, m_MeshletVertexIndicesBuffer[BufferID]->GetGPUVirtualAddress());
+		CommandList->SetGraphicsRootShaderResourceView(5, m_MeshletTrianglesBuffer[BufferID]->GetGPUVirtualAddress());
 	}
 
 }

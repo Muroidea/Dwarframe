@@ -2,7 +2,7 @@
 #define DWARFRAME_H
 
 #include "Dwarframe/GameManager.h"
-#include "Dwarframe/Window.h"
+#include "Dwarframe/Core/Window.h"
 
 //*****************************************
 //	Entry Point

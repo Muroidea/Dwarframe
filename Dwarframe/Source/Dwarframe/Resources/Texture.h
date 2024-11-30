@@ -15,8 +15,8 @@ namespace Dwarframe {
         virtual bool LoadAsset() override;
         virtual bool SaveAsset() override;
         
-#ifdef WITH_EDITOR
-		virtual void RenderOptions() override;
+#if WITH_EDITOR
+		virtual void RenderProperties() override;
 #endif
 
         inline uint32_t GetWidth() const { return m_Width; }

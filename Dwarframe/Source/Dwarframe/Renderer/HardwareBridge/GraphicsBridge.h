@@ -1,7 +1,7 @@
 #ifndef GRAPHICSBRIDGE_H
 #define GRAPHICSBRIDGE_H
 
-#include "Dwarframe/Window.h"
+#include "Dwarframe/Core/Window.h"
 
 namespace Dwarframe {
 
@@ -9,6 +9,7 @@ namespace Dwarframe {
 	{
 		switch (ShaderModel)
         {
+			case D3D_SHADER_MODEL_5_1: return "5_1";
 			case D3D_SHADER_MODEL_6_0: return "6_0";
 			case D3D_SHADER_MODEL_6_1: return "6_1";
 			case D3D_SHADER_MODEL_6_2: return "6_2";

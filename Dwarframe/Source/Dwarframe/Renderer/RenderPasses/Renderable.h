@@ -8,7 +8,6 @@ namespace Dwarframe {
 	class Entity;
 	class Material;
 	class Mesh;
-	class MaterialProxy;
 
 	class Renderable
 	{

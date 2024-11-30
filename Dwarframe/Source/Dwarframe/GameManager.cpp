@@ -3,7 +3,8 @@
 
 #define NOMINMAX
 #include "Common/Clock.h"
-#include "Window.h"
+#include "Dwarframe/Core/Window.h"
+#include "Dwarframe/Core/Input.h"
 #include "Dwarframe/Renderer/RenderPasses/BaseRenderPass.h"
 #include "Dwarframe/Renderer/Debug/DXDebugLayer.h"
 #include "Dwarframe/Renderer/HardwareBridge/GraphicsBridge.h"
@@ -46,7 +47,7 @@ namespace Dwarframe {
 		
 		m_AvailablePasses.push_back(new BaseRenderPass());
 
-	#ifdef WITH_EDITOR
+	#if WITH_EDITOR
 		m_Editor = &ImGUIEditor::Get();
 		m_Editor->Initialize();
 	#endif
@@ -63,7 +64,7 @@ namespace Dwarframe {
 		m_CurrentWorld = new World();
 		m_CurrentWorld->SetRenderPasses(&m_AvailablePasses);
 
-	#ifdef WITH_EDITOR
+	#if WITH_EDITOR
 		m_Editor->SetWorld(m_CurrentWorld);
 
 		for (auto& Manager : m_ResourceManagers)
@@ -81,7 +82,7 @@ namespace Dwarframe {
 		delete m_CurrentWorld;
 		m_CurrentWorld = nullptr;
 
-	#ifdef WITH_EDITOR
+	#if WITH_EDITOR
 		m_Editor->Shutdown();
 		m_Editor = nullptr;
 	#endif
@@ -129,6 +130,9 @@ namespace Dwarframe {
 			m_GraphicsBridge->BeginFrame(CommandList);
 			
 			m_DXContext->Update(Delta);
+			
+			Input::Get().Update();
+			// Objects logic update
 			m_CurrentWorld->Update(Delta);
 
 			for (RenderPass* Pass : m_AvailablePasses)
@@ -141,7 +145,7 @@ namespace Dwarframe {
 				Pass->Render();
 			}
 
-	#ifdef WITH_EDITOR
+	#if WITH_EDITOR
 			m_Editor->Render();
 	#endif
 

@@ -207,7 +207,7 @@ namespace Dwarframe {
 			{	
 				VertexBufferViews[BufferIndex].BufferLocation = m_Submeshes[SubmeshID].m_AttributeBuffers[BufferIndex]->GetGPUVirtualAddress();
 				VertexBufferViews[BufferIndex].SizeInBytes = GetPositionsSizeInBytes(SubmeshID);
-				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(DirectX::XMFLOAT3);
+				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(XMFLOAT3);
 
 				BufferIndex++;
 			}
@@ -216,7 +216,7 @@ namespace Dwarframe {
 			{
 				VertexBufferViews[BufferIndex].BufferLocation = m_Submeshes[SubmeshID].m_AttributeBuffers[BufferIndex]->GetGPUVirtualAddress();
 				VertexBufferViews[BufferIndex].SizeInBytes = GetNormalsSizeInBytes(SubmeshID);
-				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(DirectX::XMFLOAT3);
+				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(XMFLOAT3);
 				BufferIndex++;
 			}
             
@@ -224,7 +224,7 @@ namespace Dwarframe {
 			{
 				VertexBufferViews[BufferIndex].BufferLocation = m_Submeshes[SubmeshID].m_AttributeBuffers[BufferIndex]->GetGPUVirtualAddress();
 				VertexBufferViews[BufferIndex].SizeInBytes = GetUVsSizeInBytes(SubmeshID);
-				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(DirectX::XMFLOAT2);
+				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(XMFLOAT2);
 				BufferIndex++;
 			}
             
@@ -232,7 +232,7 @@ namespace Dwarframe {
 			{
 				VertexBufferViews[BufferIndex].BufferLocation = m_Submeshes[SubmeshID].m_AttributeBuffers[BufferIndex]->GetGPUVirtualAddress();
 				VertexBufferViews[BufferIndex].SizeInBytes = GetTangentsSizeInBytes(SubmeshID);
-				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(DirectX::XMFLOAT3);
+				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(XMFLOAT3);
 				BufferIndex++;
 			}
             
@@ -240,7 +240,7 @@ namespace Dwarframe {
 			{
 				VertexBufferViews[BufferIndex].BufferLocation = m_Submeshes[SubmeshID].m_AttributeBuffers[BufferIndex]->GetGPUVirtualAddress();
 				VertexBufferViews[BufferIndex].SizeInBytes = GetBitangentsSizeInBytes(SubmeshID);
-				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(DirectX::XMFLOAT3);
+				VertexBufferViews[BufferIndex].StrideInBytes = sizeof(XMFLOAT3);
 				BufferIndex++;
 			}
         
@@ -407,9 +407,10 @@ namespace Dwarframe {
 	{
 		return false;
 	}
-
-	void Mesh::RenderOptions()
+#if WITH_EDITOR
+	void Mesh::RenderProperties()
 	{
 		ImGui::Text("Mesh info:");
 	}
+#endif
 }

@@ -2,7 +2,7 @@
 #include "DXContext.h"
 
 #include "Dwarframe/Helpers/TextureLoader.h"
-#include "Dwarframe/Window.h"
+#include "Dwarframe/Core/Window.h"
 #include "HardwareBridge/GraphicsBridge.h"
 
 #include "Dwarframe/Helpers/Alignments.h"
@@ -118,15 +118,15 @@ namespace Dwarframe {
 
         VertexBufferViews[0].BufferLocation = m_CubePositionBuffer->GetGPUVirtualAddress();
         VertexBufferViews[0].SizeInBytes = m_CubeMesh.GetPositionsSize();
-        VertexBufferViews[0].StrideInBytes = sizeof(DirectX::XMFLOAT3);
+        VertexBufferViews[0].StrideInBytes = sizeof(XMFLOAT3);
         
         VertexBufferViews[1].BufferLocation = m_CubeNormalBuffer->GetGPUVirtualAddress();
         VertexBufferViews[1].SizeInBytes = m_CubeMesh.GetNormalsSize();
-        VertexBufferViews[1].StrideInBytes = sizeof(DirectX::XMFLOAT3);
+        VertexBufferViews[1].StrideInBytes = sizeof(XMFLOAT3);
         
         VertexBufferViews[2].BufferLocation = m_CubeUVBuffer->GetGPUVirtualAddress();
         VertexBufferViews[2].SizeInBytes = m_CubeMesh.GetUVsSize();
-        VertexBufferViews[2].StrideInBytes = sizeof(DirectX::XMFLOAT2);
+        VertexBufferViews[2].StrideInBytes = sizeof(XMFLOAT2);
         m_D3D12CommandList->IASetVertexBuffers(0, 3, VertexBufferViews);
 
         

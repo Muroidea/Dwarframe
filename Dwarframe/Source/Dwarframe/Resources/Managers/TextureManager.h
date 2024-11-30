@@ -12,12 +12,12 @@ namespace Dwarframe {
 	class TextureManager : public ResourceManager<Texture>
 	{
 	public:
-	#ifdef WITH_EDITOR
-		bool Extends(std::string ElementName) override;
+#if WITH_EDITOR
+		bool Extends(std::string_view ElementName) override;
 
 		virtual void RenderOptions() override;
 		virtual void RenderResourceList(std::vector<ContentBasicInfo>& ResourceList) override;
-	#endif
+#endif
 
 		bool AddResource(std::filesystem::path AssetPath, std::string AssetName) override;
 		

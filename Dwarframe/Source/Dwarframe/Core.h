@@ -66,7 +66,7 @@ public:
 #define STRINGIZE(x) #x
 #define LINE_STRING STRINGIZE(__LINE__)
 
-#define WITH_EDITOR 1
+#define WITH_EDITOR 1 
 
 #ifdef _DEBUG
 

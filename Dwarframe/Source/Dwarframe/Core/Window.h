@@ -6,6 +6,8 @@
 #include <string>
 #include <functional>
 
+#include "Dwarframe/Core/WindowsKeyMapper.h"
+
 namespace Dwarframe {
 
 	class Window
@@ -19,10 +21,10 @@ namespace Dwarframe {
 
 		inline HWND GetWindowHandle() const { return m_WindowHandle; }
 
-		inline uint32_t GetWindowWidth() const { return m_WindowInfo.Width; }
-		inline uint32_t GetWindowHeight() const { return m_WindowInfo.Height; }
+		inline uint32 GetWindowWidth() const { return m_WindowInfo.Width; }
+		inline uint32 GetWindowHeight() const { return m_WindowInfo.Height; }
 
-		static constexpr uint32_t GetNumOfFrames() { return s_NumOfFrames; }
+		static constexpr uint32 GetNumOfFrames() { return s_NumOfFrames; }
 		
 	private:
 		static LRESULT CALLBACK WindowProcStaticSetup(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) noexcept;
@@ -34,8 +36,8 @@ namespace Dwarframe {
 		struct WindowInfo
 		{
 			// Window resolution
-			uint32_t Width = 1980;
-			uint32_t Height = 1080;
+			uint32 Width = 1980;
+			uint32 Height = 1080;
 			
 			// Window state
 			bool Fullscreen = false;
@@ -45,10 +47,10 @@ namespace Dwarframe {
 			std::wstring WindowName = L"Dwarframe";
 		} m_WindowInfo;
 		
-		std::function<void(unsigned int, unsigned int)> m_OnResizeFunction;
+		std::function<void(uint32, uint32)> m_OnResizeFunction;
 
 	private:
-		static constexpr size_t s_NumOfFrames = 2;
+		static constexpr uint64 s_NumOfFrames = 2;
 
 		HINSTANCE m_InstanceHandle;
 		HWND m_WindowHandle;
@@ -57,7 +59,7 @@ namespace Dwarframe {
 
 		// Message handling staff
 		MSG m_MessageInfo;
-		
+		WindowsKeyMapper m_KeyMapper;
 		
 	public:
 		Window(const Window& Other) = delete; 

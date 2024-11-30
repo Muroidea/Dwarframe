@@ -7,6 +7,8 @@
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 #endif
 
+#include "Dwarframe/Core/Input.h"
+
 namespace Dwarframe {
 
     LRESULT Window::WindowProcStaticSetup(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) noexcept
@@ -130,6 +132,12 @@ namespace Dwarframe {
             MessageBoxA(NULL, "Unable to register raw input.", "Error", MB_OK | MB_ICONERROR);
             throw std::exception();
         }
+
+        POINT CursorPos {};
+        if (GetCursorPos(&CursorPos))
+        {
+            Input::Get().SetMousePos(CursorPos.x, CursorPos.y);
+        }
 	}
 
 	void Window::Shutdown()
@@ -149,7 +157,7 @@ namespace Dwarframe {
             return true;
         }
     #endif
-
+    
         switch (Msg)
         {
             case WM_INPUT:
@@ -174,38 +182,53 @@ namespace Dwarframe {
                 {
                     if (raw->data.keyboard.Flags == RI_KEY_MAKE)
                     {
-                        if (raw->data.keyboard.VKey == VK_F11)
-                        {
-                            ToggleFullscreen();
-                        }
+                        Input::Get().PressKey(m_KeyMapper.MapKeyboardCode(raw->data.keyboard.VKey));
                     }
                     else if (raw->data.keyboard.Flags & RI_KEY_BREAK)
                     {
+                        Input::Get().ReleaseKey(m_KeyMapper.MapKeyboardCode(raw->data.keyboard.VKey));
                     }
                 }
                 else if (raw->header.dwType == RIM_TYPEMOUSE)
                 {
-                    if (raw->data.mouse.usFlags & MOUSE_MOVE_RELATIVE)
+                    if (raw->data.mouse.usFlags == MOUSE_MOVE_RELATIVE)
                     {
+                        Input::Get().MouseMoved(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
                     }
                     else if (raw->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE)
                     {
+                        Input::Get().MouseMoved(raw->data.mouse.lLastX, raw->data.mouse.lLastY, true);
                     }
 
                     if (raw->data.mouse.usButtonFlags & (RI_MOUSE_BUTTON_1_DOWN | RI_MOUSE_BUTTON_2_DOWN | RI_MOUSE_BUTTON_3_DOWN | RI_MOUSE_BUTTON_4_DOWN | RI_MOUSE_BUTTON_5_DOWN))
                     {
+                        Input::Get().PressKey(m_KeyMapper.MapMouseCode(raw->data.mouse.usButtonFlags));
                     }
                     else if (raw->data.mouse.usButtonFlags & (RI_MOUSE_BUTTON_1_UP | RI_MOUSE_BUTTON_2_UP | RI_MOUSE_BUTTON_3_UP | RI_MOUSE_BUTTON_4_UP | RI_MOUSE_BUTTON_5_UP))
                     {
+                        Input::Get().ReleaseKey(m_KeyMapper.MapMouseCode(raw->data.mouse.usButtonFlags));
                     }
 
                     if (raw->data.mouse.usButtonFlags & (RI_MOUSE_WHEEL | RI_MOUSE_HWHEEL))
                     {
-                        
+                        short WheelDelta = (short)raw->data.mouse.usButtonData;
+                        float ScrollDelta = (float)WheelDelta / WHEEL_DELTA;
+                        Input::Get().WheelMoved(ScrollDelta);
                     }
                 }
 
                 delete[] lpb;
+                return 0;
+            }
+            case WM_ACTIVATE:
+            case WM_SETFOCUS:
+            {
+                POINT CursorPos {};
+                if (GetCursorPos(&CursorPos))
+                {
+                    Input::Get().SetMousePos(CursorPos.x, CursorPos.y);
+                }
+
                 return 0;
             }
             case WM_CLOSE: // Window should close message

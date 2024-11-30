@@ -26,8 +26,8 @@ namespace Dwarframe {
 		//const RootSignature& GetRootSignatureRef() const { return m_RootSignature; }
 		class ID3D12RootSignature* GetRootSignature() const { return m_RootSignature.GetRootSignature(); }
 
-#ifdef WITH_EDITOR
-		virtual void RenderOptions() override;
+#if WITH_EDITOR
+		virtual void RenderProperties() override;
 #endif
     private:
         ERenderingPipelineType m_Pipeline;

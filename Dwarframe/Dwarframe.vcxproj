@@ -92,10 +92,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Dwarframe\Common\Camera.h" />
+    <ClInclude Include="Source\Dwarframe\Core\Input.h" />
+    <ClInclude Include="Source\Dwarframe\Core\KeyCodes.h" />
+    <ClInclude Include="Source\Dwarframe\Gameplay\Camera.h" />
     <ClInclude Include="Source\Dwarframe\Common\Clock.h" />
     <ClInclude Include="Source\Dwarframe\Editor\Editor.h" />
     <ClInclude Include="Source\Dwarframe\Editor\EditorExtender.h" />
+    <ClInclude Include="Source\Dwarframe\Editor\WidgetsHelper.h" />
     <ClInclude Include="Source\Dwarframe\Gameplay\Components\Component.h" />
     <ClInclude Include="Source\Dwarframe\Gameplay\Entity.h" />
     <ClInclude Include="Source\Dwarframe\Gameplay\World.h" />
@@ -109,6 +112,7 @@
     <ClInclude Include="Source\Dwarframe\GameManager.h" />
     <ClInclude Include="Source\Dwarframe.h" />
     <ClInclude Include="Source\Dwarframe\EntryPoint.h" />
+    <ClInclude Include="Source\Dwarframe\Math\Transform.h" />
     <ClInclude Include="Source\Dwarframe\Renderer\DXContext.h" />
     <ClInclude Include="Source\Dwarframe\Renderer\Debug\DXDebugLayer.h" />
     <ClInclude Include="Source\Dwarframe\Renderer\GPUResources\Buffer.h" />
@@ -132,7 +136,7 @@
     <ClInclude Include="Source\Dwarframe\Resources\Material.h" />
     <ClInclude Include="Source\Dwarframe\Resources\Mesh.h" />
     <ClInclude Include="Source\Dwarframe\Resources\GameAsset.h" />
-    <ClInclude Include="Source\Dwarframe\Window.h" />
+    <ClInclude Include="Source\Dwarframe\Core\Window.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\Dwarframe\Resources\Texture.h" />
     <ClInclude Include="Vendors\Assimp\include\assimp\aabb.h" />
@@ -230,9 +234,10 @@
     <ClInclude Include="Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\Aftermath\GFSDK_Aftermath_Defines.h" />
     <ClInclude Include="Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\Aftermath\GFSDK_Aftermath_GpuCrashDump.h" />
     <ClInclude Include="Vendors\NVIDIA_Nsight_Aftermath_SDK_2024.1.0.24075\Aftermath\GFSDK_Aftermath_GpuCrashDumpDecoding.h" />
+    <ClInclude Include="Source\Dwarframe\Core\WindowsKeyMapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Dwarframe\Common\Camera.cpp" />
+    <ClCompile Include="Source\Dwarframe\Gameplay\Camera.cpp" />
     <ClCompile Include="Source\Dwarframe\Common\Clock.cpp" />
     <ClCompile Include="Source\Dwarframe\Core.cpp" />
     <ClCompile Include="Source\Dwarframe\Editor\Editor.cpp" />
@@ -267,7 +272,7 @@
     <ClCompile Include="Source\Dwarframe\Resources\Material.cpp" />
     <ClCompile Include="Source\Dwarframe\Resources\Mesh.cpp" />
     <ClCompile Include="Source\Dwarframe\Resources\GameAsset.cpp" />
-    <ClCompile Include="Source\Dwarframe\Window.cpp" />
+    <ClCompile Include="Source\Dwarframe\Core\Window.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>

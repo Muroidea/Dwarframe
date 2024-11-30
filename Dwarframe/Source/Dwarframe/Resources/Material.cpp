@@ -122,8 +122,8 @@ namespace Dwarframe {
 			m_ShaderList.back()->SetShaderType(List[ID]);
 		}
 	}
-
-	void Material::RenderOptions()
+#if WITH_EDITOR
+	void Material::RenderProperties()
 	{
 		ImGui::Text("Material info:");
 		
@@ -223,5 +223,5 @@ namespace Dwarframe {
 			SaveAsset();
 		}
 	}
-
+#endif
 }

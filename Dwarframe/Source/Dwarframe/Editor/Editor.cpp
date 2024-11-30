@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "Editor.h"
 
-#include "Dwarframe/Window.h"
+#include "Dwarframe/Editor/WidgetsHelper.h"
+#include "Dwarframe/Core/Window.h"
 #include "Dwarframe/Renderer/DXContext.h"
 #include "Dwarframe/Renderer/Pipeline/DescriptorHeap.h"
 #include "Dwarframe/Resources/Managers/ResourceManager.h"
 #include "Dwarframe/Resources/Material.h"
 #include "Dwarframe/Resources/Mesh.h"
+#include "Dwarframe/Gameplay/Entity.h"
 #include "Dwarframe/Gameplay/World.h"
 
 #include "ImGUI/imgui.h"
@@ -15,6 +17,7 @@
 
 namespace Dwarframe {
 
+#if WITH_EDITOR
 	bool ImGUIEditor::Initialize()
 	{
 		// Setup Dear ImGui context
@@ -79,7 +82,6 @@ namespace Dwarframe {
 		ImGuiDockNodeFlags DockspaceFlags = ImGuiDockNodeFlags_PassthruCentralNode;
 		ImGuiID DockspaceID = ImGui::GetID("Dock space");
 		ImGui::DockSpace(DockspaceID, ImVec2(0.0f, 0.0f), DockspaceFlags);
-
 		// Show demo windwo so we can look what we need
 		ImGui::ShowDemoWindow();
 
@@ -113,16 +115,25 @@ namespace Dwarframe {
 		m_RegisteredExtenders.push_back(Extender);
 	}
 
+	void ImGUIEditor::UnregisterEditorExtender(IEditorExtender* Extender)
+	{
+		m_RegisteredExtenders.erase(std::find(m_RegisteredExtenders.begin(), m_RegisteredExtenders.end(), Extender));
+	}
+
 	void ImGUIEditor::SetWorld(World* NewWorld)
 	{ 
 		// TODO: probably some checks are needed.
 		m_CurrentWorld = NewWorld;
 	}
 
-	void ImGUIEditor::SetSelected(IResourceInspectorExtender* Extender)
+	void ImGUIEditor::SetSelectedAsset(GameAsset* Extender)
 	{
-		m_SelectedContentRow = std::numeric_limits<uint32>::max();
-		m_SelectedExtender = Extender;
+		m_SelectedAsset = Extender;
+	}
+
+	void ImGUIEditor::SetSelectedEntity(Entity* Extender)
+	{
+		m_SelectedEntity = Extender;
 	}
 
 	void ImGUIEditor::RenderGeneralWindow()
@@ -137,7 +148,7 @@ namespace Dwarframe {
 		LeftWindowFlags |= ImGuiWindowFlags_NoCollapse;
 
 		
-		ImGui::Begin(EditorNames::LeftWindow.c_str());
+		ImGui::Begin(EditorNames::LeftWindow.data());
 		ImGui::SetWindowFontScale(1.4f);
 		ImGuiID TestDockID = ImGui::GetWindowDockID();
 
@@ -163,7 +174,7 @@ namespace Dwarframe {
 		ContentWindowFlags |= ImGuiWindowFlags_NoCollapse;
 
 		
-		ImGui::Begin(EditorNames::ContentWindow.c_str());
+		ImGui::Begin(EditorNames::ContentWindow.data());
 		ImGui::SetWindowFontScale(1.4f);
 		ImGuiID TestDockID = ImGui::GetWindowDockID();
 
@@ -205,10 +216,9 @@ namespace Dwarframe {
 					
                     ImGui::TableSetColumnIndex(0);
 
-					if (ImGui::Selectable(ResourceList[RowID].m_Name.data(), RowID == m_SelectedContentRow, ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowOverlap, ImVec2(0, TextLineHeight)))
+					if (ImGui::Selectable(ResourceList[RowID].m_Name.data(), ResourceList[RowID].Asset == m_SelectedAsset, ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowOverlap, ImVec2(0, TextLineHeight)))
                     {
-						m_SelectedContentRow = RowID;
-						m_SelectedExtender = ResourceList[RowID].m_InspectorExtender;
+						m_SelectedAsset = ResourceList[RowID].Asset;
                     }
 					
 					if (ImGui::BeginDragDropSource())
@@ -236,20 +246,47 @@ namespace Dwarframe {
 
 	void ImGUIEditor::RenderInspectorWindow()
 	{
-		ImGui::Begin("WorldContent");
+		ImGui::Begin(EditorNames::WorldOutlinerWindow.data());
 
-		m_CurrentWorld->RenderGameObjects();
+		const std::vector<Entity*>& Entities = m_CurrentWorld->GetUnparentedEntities();
+
+		if (ImGui::Button("Add new entity"))
+        {
+			// TODO: Change EntityCounter to something more clever...
+			static uint32 EntityCounter = 0;
+            m_CurrentWorld->CreateEntity("NewEntity_" + std::to_string(EntityCounter));
+			EntityCounter++;
+        }
+
+		if (ImGui::TreeNode("Entities"))
+		{
+			uint32 GeneralID = 0;
+			
+			for (int32 EntityID = 0; EntityID < Entities.size(); EntityID++)
+			{
+				EditorHelper::DrawTreeNode(Entities[EntityID], GeneralID);
+				GeneralID += Entities[EntityID]->GetNumOfChildren(true) + 1;
+			}
+			
+            ImGui::TreePop();
+        }
 
 		ImGui::End();
 		
-		ImGui::Begin(EditorNames::RightWindow.c_str());
+		ImGui::Begin(EditorNames::PropertiesWindow.data());
 		ImGui::SetWindowFontScale(1.4f);
 		
-		if (m_SelectedExtender)
+		if (m_SelectedEntity)
 		{
-			m_SelectedExtender->RenderOptions();
+			m_SelectedEntity->RenderProperties();
+		}
+		else if (m_SelectedAsset)
+		{
+			m_SelectedAsset->RenderProperties();
 		}
 
 		ImGui::End();
 	}
+
+#endif
 }

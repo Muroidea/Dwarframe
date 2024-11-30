@@ -21,6 +21,7 @@ namespace Dwarframe {
 		~BaseRenderPass();
 		
 		virtual void AddRenderable(Renderable* InRenderable) override;
+		virtual void RemoveRenderable(Renderable* InRenderable) override;
 
 		// Inherited via RenderPass
 		virtual void Render() override;
@@ -29,26 +30,14 @@ namespace Dwarframe {
 		void SetUploadBufferSize(uint32 NewSize);
 		void RecreateUploadBuffer();
 
+		inline void SetViewMatrix(XMMATRIX ViewMatrix) { m_ViewMatrix = ViewMatrix; }
+		inline void SetProjectionMatrix(XMMATRIX ProjectionMatrix) { m_ProjectionMatrix = ProjectionMatrix; }
 
+#if WITH_EDITOR
 		// Inherited via IEditorExtender
-		virtual bool Extends(std::string ElementName) override;
+		virtual bool Extends(std::string_view ElementName) override;
 		virtual void RenderOptions() override;
-
-	private:
-		int32 NumOfMeshletsToRender = 1;
-
-		bool bEnableProjectionMatrix = true;
-		float32 FieldOfView = 90.0f;
-
-		bool bEnableViewMatrix = true;
-		DirectX::XMVECTOR EyePosition = DirectX::XMVectorSet(0.0f, 8.0f, -10.0f, 1.0f);
-		DirectX::XMVECTOR TargetPoint = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-		DirectX::XMVECTOR UpDirection = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-		DirectX::XMVECTOR Scale = DirectX::XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-		DirectX::XMVECTOR RotationAxis = DirectX::XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-		float32 RotationAngle = 0;
-		DirectX::XMVECTOR Translation = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+#endif
 
 	private:
 		void AdjustBarriers(uint32 NewElements); // Make sure that we have enough space for given number of barriers
@@ -60,13 +49,31 @@ namespace Dwarframe {
 		void BindMeshletData(uint32 BufferID);
 
 	private:
+		uint32 m_ShadingVariant = 0;
+
+		bool bEnableProjectionMatrix = true;
+		float32 FieldOfView = 90.0f;
+
+		bool bEnableViewMatrix = true;
+		XMVECTOR EyePosition = XMVectorSet(0.0f, 8.0f, -10.0f, 1.0f);
+		XMVECTOR TargetPoint = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+		XMVECTOR UpDirection = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	private:
+		inline static constexpr int32 MaxNumOfPrimitives = 128;
+
 		struct alignas(64) MeshConstants
 		{
-			DirectX::XMFLOAT4X4 World;
-			DirectX::XMFLOAT4X4 WorldView;
-			DirectX::XMFLOAT4X4 WorldViewProj;
+			XMFLOAT4X4 World[MaxNumOfPrimitives];
+			XMFLOAT4X4 WorldView[MaxNumOfPrimitives];
+			XMFLOAT4X4 WorldViewProj[MaxNumOfPrimitives];
 			uint32 DrawMeshlets;
-			uint32 Alignment[15]; // Space to be used
+			/*
+			XMFLOAT4X4 World;
+			XMFLOAT4X4 WorldView;
+			XMFLOAT4X4 WorldViewProj;
+			uint32 DrawMeshlets;
+			float32 Fill[15];*/
 		} m_MeshConstants;
 
 		Buffer* m_MeshConstantsBuffer;
@@ -86,6 +93,8 @@ namespace Dwarframe {
 		std::vector<Buffer*> m_MeshletTrianglesBuffer;
 		std::vector<Buffer*> m_MeshletVertexIndicesBuffer;
 		std::vector<Buffer*> m_MeshletsBuffer;
+
+		bool bUpdateTransforms = true;
 	};
 }
 

@@ -78,13 +78,10 @@ namespace Dwarframe {
 
 	}
 	
-#ifdef WITH_EDITOR
-	bool MeshManager::Extends(std::string ElementName)
+#if WITH_EDITOR
+	bool MeshManager::Extends(std::string_view ElementName)
 	{
-		if (ElementName == EditorNames::LeftWindow)
-		{
-			return true;
-		}
+		return EditorNames::ContentWindow == ElementName;
 	}
 
 	void MeshManager::RenderOptions()
@@ -124,7 +121,7 @@ namespace Dwarframe {
 
 		for (auto& Entry : m_Resources)
 		{
-			ResourceList.emplace_back(Entry.second->m_AssetName, "Mesh", Entry.second->m_AssetPath, Entry.second->m_AssetSize, Entry.second, Entry.second);
+			ResourceList.emplace_back(Entry.second->m_AssetName, "Mesh", Entry.second->m_AssetPath, Entry.second->m_AssetSize, Entry.second);
 		}
 	}
 #endif

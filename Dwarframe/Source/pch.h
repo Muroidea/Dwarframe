@@ -39,6 +39,7 @@
 	#include <comdef.h>
 
 	using namespace Microsoft::WRL;
+	using namespace DirectX;
 
 #endif
 
@@ -48,11 +49,12 @@
 #include "Dwarframe/Helpers/Alignments.h"
 #include "Dwarframe/Helpers/MeshLoader.h"
 #include "Dwarframe/Helpers/TextureLoader.h"
+#include "Dwarframe/Math/Transform.h"
 
 #if WITH_EDITOR
 #include "Dwarframe/Editor/Editor.h"
-#include "Dwarframe/Editor/EditorExtender.h"
 #endif
+#include "Dwarframe/Editor/EditorExtender.h"
 
 #endif // !PCH_H
 

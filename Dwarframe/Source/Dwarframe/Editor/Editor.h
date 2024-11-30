@@ -9,18 +9,22 @@ namespace Dwarframe {
 	class IResourceInspectorExtender;
 	class World;
 
+	class Entity;
+	class GameAsset;
+
+#if WITH_EDITOR
 	class EditorNames
 	{
 	public:
-		inline static const std::string LeftWindow = "GeneralWindow";
-		inline static const std::string ContentWindow = "ContentWindow";
-		inline static const std::string RightWindow = "InspectorWindow";
+		inline static const std::string_view LeftWindow = "GeneralWindow";
+		inline static const std::string_view ContentWindow = "ContentWindow";
+		inline static const std::string_view WorldOutlinerWindow = "WorldOutliner";
+		inline static const std::string_view PropertiesWindow = "PropertiesWindow";
 	};
 
 	class ImGUIEditor
 	{
 	public:
-
         bool Initialize();
 		void Shutdown();
         void Update(float DeltaTime);
@@ -29,12 +33,19 @@ namespace Dwarframe {
         void Resize(uint32 Width, uint32 Height);
 
 		void RegisterEditorExtender(IEditorExtender* Extender);
+		void UnregisterEditorExtender(IEditorExtender* Extender);
+
 		void SetWorld(World* NewWorld);
-		void SetSelected(IResourceInspectorExtender* Extender);
+
+		void SetSelectedAsset(GameAsset* Extender);
+		void SetSelectedEntity(Entity* Extender);
+
+		GameAsset* GetSelectedAsset() const { return m_SelectedAsset; }
+		Entity* GetSelectedEntity() const { return m_SelectedEntity; }
 
 		ImGUIEditor(const ImGUIEditor& Other) = delete;
 		ImGUIEditor& operator=(const ImGUIEditor& Other) = delete;
-
+		
 		inline static ImGUIEditor& Get()
 		{
 			static ImGUIEditor Instance;
@@ -50,16 +61,20 @@ namespace Dwarframe {
 		void RenderInspectorWindow();
 
 	private:
-        ShaderResourceDescriptorHeap* m_DescriptorHeap;
-		std::vector<IEditorExtender*> m_RegisteredExtenders;
+        ShaderResourceDescriptorHeap* m_DescriptorHeap = nullptr;
+		std::vector<IEditorExtender*> m_RegisteredExtenders {};
 		//std::vector<std::string> m_RegisteredResourcesWindow;
 		
-		World* m_CurrentWorld;
+		World* m_CurrentWorld = nullptr;
 
-		uint32 m_SelectedContentRow = std::numeric_limits<uint32>::max();
-		IResourceInspectorExtender* m_SelectedExtender = nullptr;
+		// Asset Window info
+		GameAsset* m_SelectedAsset = nullptr;
+
+		// World Outliner info
+		Entity* m_SelectedEntity = nullptr;
 	};
 
+#endif
 }
 
 #endif // !EDITOR_H

@@ -12,14 +12,13 @@ namespace Dwarframe {
 		std::string_view m_AssetPath;
 		uint32 m_Size;
 		GameAsset* Asset;
-		IResourceInspectorExtender* m_InspectorExtender;
 	};
 
 	class IEditorExtender
 	{
 	public:
-	#ifdef WITH_EDITOR
-		virtual bool Extends(std::string ElementName) = 0;
+	#if WITH_EDITOR
+		virtual bool Extends(std::string_view ElementName) = 0;
 
 		virtual void RenderOptions() {};
 		virtual void RenderResourceList(std::vector<ContentBasicInfo>& ResourceList) {};
@@ -29,8 +28,8 @@ namespace Dwarframe {
 	class IResourceInspectorExtender
 	{
 	public:
-	#ifdef WITH_EDITOR
-		virtual void RenderOptions() = 0;
+	#if WITH_EDITOR
+		virtual void RenderProperties() = 0;
 	#endif
 	};
 }

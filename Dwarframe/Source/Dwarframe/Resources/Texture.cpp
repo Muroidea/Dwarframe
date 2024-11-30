@@ -21,9 +21,10 @@ namespace Dwarframe {
 		return false;
 	}
 
-	void Texture::RenderOptions()
+#if WITH_EDITOR
+	void Texture::RenderProperties()
 	{
 		ImGui::Text("Texture info:");
 	}
-
+#endif
 }

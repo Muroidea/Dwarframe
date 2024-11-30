@@ -2,7 +2,6 @@
 #define DXCONTEXT_H
 
 #include "Dwarframe/Core.h"
-#include "Dwarframe/Common/Camera.h"
 #include "Dwarframe/Helpers/TextureLoader.h"
 #include "Dwarframe/Renderer/Pipeline/RootSignature.h"
 #include "Dwarframe/Renderer/Pipeline/PipelineState.h"

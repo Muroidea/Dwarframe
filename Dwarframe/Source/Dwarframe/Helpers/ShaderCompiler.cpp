@@ -208,9 +208,10 @@ namespace Dwarframe {
 
     bool ShaderCompiler::ProcessReflection(Shader* InShader)
     {
-        static const std::string_view RootConstantsName { "$Globals" };
+        const std::string_view RootConstantsName { "RootConstants" };
+        const uint32 SizeOfRootDescriptor = 16; // In bytes;
 
-        static const D3D12_SHADER_VISIBILITY ShaderVisibility[EShaderType::NumOfElements] = {
+        const D3D12_SHADER_VISIBILITY ShaderVisibility[EShaderType::NumOfElements] = {
             D3D12_SHADER_VISIBILITY_VERTEX,
             D3D12_SHADER_VISIBILITY_HULL,
             D3D12_SHADER_VISIBILITY_DOMAIN,
@@ -252,32 +253,32 @@ namespace Dwarframe {
             if (BindDescription.Name == RootConstantsName)
             {
                 ID3D12ShaderReflectionConstantBuffer* ReflectionConstantBuffer;
-                //for (uint32 ID = 0; ID < ShaderDescription.ConstantBuffers; ID++)
-                //{
-                    ReflectionConstantBuffer = InShader->m_Reflection->GetConstantBufferByIndex(0);
+                ReflectionConstantBuffer = InShader->m_Reflection->GetConstantBufferByName(BindDescription.Name);
 
-                    D3D12_SHADER_BUFFER_DESC ShaderBufferDesc {};
-                    ReflectionConstantBuffer->GetDesc(&ShaderBufferDesc);
+                D3D12_SHADER_BUFFER_DESC ShaderBufferDesc {};
+                ReflectionConstantBuffer->GetDesc(&ShaderBufferDesc);
 
-                    uint32 WastedMemory = 0;
-                    uint32 CurrentOffset = 0;
-                    //ID3D12ShaderReflectionVariable* ReflectionVariable;
-                    for (uint32 ID = 0; ID < ShaderBufferDesc.Variables; ID++)
+                const uint32 DWordSize = 4; // In bytes
+                uint32 PreviousOffsetStart = 0;
+                uint32 DiffBetweenVariables = 0;
+
+                uint8 BindPoint = 0;
+                for (uint32 VariableId = 0; VariableId < ShaderBufferDesc.Variables; VariableId++)
+                {
+                    D3D12_SHADER_VARIABLE_DESC ShaderVariableDesc {};
+                    ReflectionConstantBuffer->GetVariableByIndex(VariableId)->GetDesc(&ShaderVariableDesc);
+
+                    DiffBetweenVariables = ShaderVariableDesc.StartOffset - PreviousOffsetStart;
+
+                    if (DiffBetweenVariables > 0)
                     {
-                        //ReflectionVariable = ReflectionConstantBuffer->GetVariableByIndex(ID);
-
-                        D3D12_SHADER_VARIABLE_DESC ShaderVariableDesc {};
-                        ReflectionConstantBuffer->GetVariableByIndex(ID)->GetDesc(&ShaderVariableDesc);
-                        
-                        if (ShaderVariableDesc.StartOffset > CurrentOffset)
-                        {
-                            WastedMemory += ShaderVariableDesc.StartOffset - CurrentOffset;
-                            CurrentOffset = ShaderVariableDesc.StartOffset;
-                        }
-                        
-                        InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { ShaderVariableDesc.Name, (uint8)ID, (uint8)(ShaderVariableDesc.Size / 4), Shader::EResourceType::DirectConstant, ShaderVisibility[InShader->m_ShaderType] });
+                        BindPoint += DiffBetweenVariables / SizeOfRootDescriptor;
                     }
-                //}
+
+                    PreviousOffsetStart = ShaderVariableDesc.StartOffset;
+
+                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { ShaderVariableDesc.Name, ShaderVisibility[InShader->m_ShaderType], BindPoint, (uint8)(ShaderVariableDesc.Size / 4), Shader::EResourceType::DirectConstant });
+                }
 
                 continue;
             }
@@ -285,25 +286,25 @@ namespace Dwarframe {
             switch (BindDescription.Type)
             {
                 case D3D_SIT_CBUFFER:
-                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::ConstantBufferView, ShaderVisibility[InShader->m_ShaderType] });
+                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, ShaderVisibility[InShader->m_ShaderType], (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::ConstantBufferView });
                     break;
                 case D3D_SIT_TBUFFER:
                 case D3D_SIT_TEXTURE:
-                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::ShaderResourceView, ShaderVisibility[InShader->m_ShaderType] });
+                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, ShaderVisibility[InShader->m_ShaderType], (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::ShaderResourceView });
                     break;
                 case D3D_SIT_UAV_RWTYPED:
-                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::UnorderedAccessView, ShaderVisibility[InShader->m_ShaderType] });
+                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, ShaderVisibility[InShader->m_ShaderType], (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::UnorderedAccessView });
                     break;
                 case D3D_SIT_STRUCTURED:
                 case D3D_SIT_BYTEADDRESS:
-                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::ShaderResourceViewUntyped, ShaderVisibility[InShader->m_ShaderType] });
+                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, ShaderVisibility[InShader->m_ShaderType], (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::ShaderResourceViewUntyped });
                     break;
                 case D3D_SIT_UAV_RWSTRUCTURED:
                 case D3D_SIT_UAV_RWBYTEADDRESS:
-                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::UnorderedAccessViewUntyped, ShaderVisibility[InShader->m_ShaderType] });
+                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, ShaderVisibility[InShader->m_ShaderType], (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::UnorderedAccessViewUntyped });
                     break;
                 case D3D_SIT_SAMPLER:
-                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::Sampler, ShaderVisibility[InShader->m_ShaderType] });
+                    InShader->m_BoundedResources.emplace_back( Shader::BoundedResource { BindDescription.Name, ShaderVisibility[InShader->m_ShaderType], (uint8)BindDescription.BindPoint, (uint8)BindDescription.Space, Shader::EResourceType::Sampler });
                     break;
                 default:
                     break;
