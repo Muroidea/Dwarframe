@@ -30,8 +30,16 @@ namespace Dwarframe {
 		if (MeshLoader::Load(AssetPath, NewMesh, false))
 		//if (MeshLoader::LoadCube(NewMesh))
 		{
+			std::vector<Mesh::LODSetup> Setups;
+			Setups.emplace_back(0.75f, 0.5f);
+			Setups.emplace_back(0.5f, 0.5f);
+			
+			MeshLoader::GenerateLODs(NewMesh, Setups);
+
 			//MeshLoader::BuildMeshlets(NewMesh);
 			MeshLoader::BuildMeshletsWithCheck(NewMesh);
+
+
 			m_Resources.emplace(NewMesh->m_Hash, NewMesh);
 			return true;
 		}

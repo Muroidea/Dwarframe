@@ -13,8 +13,8 @@ struct NoCopiable
 struct NoMovable
 {
     NoMovable() = default;
-    NoMovable(const NoMovable&) = delete;
-    NoMovable& operator=(const NoMovable&) = delete;
+    NoMovable(const NoMovable&&) = delete;
+    NoMovable& operator=(const NoMovable&&) = delete;
 };
 
 /*

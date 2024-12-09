@@ -1,6 +1,8 @@
 #ifndef GAMEASSET_H
 #define GAMEASSET_H
 
+#include "Dwarframe/Editor/EditorExtender.h"
+
 namespace Dwarframe {
 	
 	class GameAsset : public IResourceInspectorExtender

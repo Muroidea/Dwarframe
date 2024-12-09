@@ -45,15 +45,15 @@ namespace Dwarframe {
 			MousePosY = m_MousePosY;
 		}
 		
-		inline void GetMousePositionChange(int32& MousePosChangeX, int32& MousePosChangeY)
+		inline void GetMousePositionDelta(int32& MousePosChangeX, int32& MousePosChangeY)
 		{
-			MousePosChangeX = m_MouseChangeX;
-			MousePosChangeY = m_MouseChangeY;
+			MousePosChangeX = m_MouseDeltaX;
+			MousePosChangeY = m_MouseDeltaY;
 		}
 		
-		inline void GetMouseWheelChange(int32& MouseWheelChange)
+		inline void GetMouseWheelDelta(int32& MouseWheelChange)
 		{
-			MouseWheelChange = m_MouseWheelChange;
+			MouseWheelChange = m_MouseWheelDelta;
 		}
 
 		inline void RegisterKeyActionCallback(EDwarframeKeyCodes Code, EDwarframeKeyState State, std::function<void()> Func)
@@ -141,21 +141,21 @@ namespace Dwarframe {
 			m_MousePosY = MousePosY;
 		}
 
-		inline void MouseMoved(int32 ChangeX, int32 ChangeY, bool bAbsolute = false)
+		inline void MouseMoved(int32 DeltaX, int32 DeltaY, bool bAbsolute = false)
 		{
-			m_MousePosX += ChangeX;
-			m_MousePosY += ChangeY;
+			m_MousePosX += DeltaX;
+			m_MousePosY += DeltaY;
 
-			m_MouseChangeX = ChangeX;
-			m_MouseChangeY = ChangeY;
+			m_MouseDeltaX = DeltaX;
+			m_MouseDeltaY = DeltaY;
 			
 			m_SingleActionsToPerform.push_back(&m_OnMouseMoved);
 		}
 		
-		inline void WheelMoved(int32 Change)
+		inline void WheelMoved(int32 Delta)
 		{
-			m_MouseWheelPos += Change;
-			m_MouseWheelChange = Change;
+			m_MouseWheelPos += Delta;
+			m_MouseWheelDelta = Delta;
 			m_SingleActionsToPerform.push_back(&m_OnWheelMoved);
 		}
 
@@ -214,11 +214,13 @@ namespace Dwarframe {
 		}
 
 	private:
-		int32 m_MousePosX, m_MousePosY;
-		int32 m_MouseChangeX, m_MouseChangeY;
+		int32 m_MousePosX = 0;
+		int32 m_MousePosY = 0;
+		int32 m_MouseDeltaX = 0;
+		int32 m_MouseDeltaY = 0;
 
-		int32 m_MouseWheelPos;
-		int32 m_MouseWheelChange;
+		int32 m_MouseWheelPos = 0;
+		int32 m_MouseWheelDelta = 0;
 
 		uint64 m_PressedKeys[GetDwarframeKeyCodesEnumSizeIn64Ints()];
 		uint64 m_ReleasedKeys[GetDwarframeKeyCodesEnumSizeIn64Ints()];

@@ -25,6 +25,8 @@ namespace Dwarframe {
 		InputRef.RegisterKeyActionCallback(EDwarframeKeyCodes::DF_KEY_A, EDwarframeKeyState::DF_KEY_PRESSED, std::bind(&Camera::OnCameraMoved, this));
 		InputRef.RegisterKeyActionCallback(EDwarframeKeyCodes::DF_KEY_A, EDwarframeKeyState::DF_KEY_HOLD, std::bind(&Camera::OnCameraMoved, this));
 
+		InputRef.RegisterKeyActionCallback(EDwarframeKeyCodes::DF_KEY_F10, EDwarframeKeyState::DF_KEY_PRESSED, std::bind(&Camera::OnCameraMoved, this));
+
 		m_DefaultRight = XMVECTOR { 1.0f, 0.0f, 0.0f, 0.0f };
 		m_DefaultUp = XMVECTOR { 0.0f, 1.0f, 0.0f, 0.0f };
 		m_DefaultForward = XMVECTOR { 0.0f, 0.0f, 1.0f, 0.0f };
@@ -76,7 +78,7 @@ namespace Dwarframe {
 		if (bCameraEnabled && Input::Get().IsKeyPressed(EDwarframeKeyCodes::DF_MOUSE_LEFT_BUTTON))
 		{
 			int32 XChange, YChange;
-			Input::Get().GetMousePositionChange(XChange, YChange);
+			Input::Get().GetMousePositionDelta(XChange, YChange);
 
 			m_Yaw += static_cast<float32>(XChange) * m_MouseSensitivity; 
 			m_Pitch += static_cast<float32>(YChange) * m_MouseSensitivity;

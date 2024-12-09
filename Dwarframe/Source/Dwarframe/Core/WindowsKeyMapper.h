@@ -118,13 +118,6 @@ namespace Dwarframe {
             m_WindowsToEngineKeyboard[VK_NUMLOCK] = EDwarframeKeyCodes::DF_KEY_NUMLOCK;
             m_WindowsToEngineKeyboard[VK_SCROLL] = EDwarframeKeyCodes::DF_KEY_SCROLL_LOCK;
 
-            m_WindowsToEngineKeyboard[VK_LSHIFT] = EDwarframeKeyCodes::DF_KEY_LEFT_SHIFT;
-            m_WindowsToEngineKeyboard[VK_RSHIFT] = EDwarframeKeyCodes::DF_KEY_RIGHT_SHIFT;
-            m_WindowsToEngineKeyboard[VK_LCONTROL] = EDwarframeKeyCodes::DF_KEY_LEFT_CTRL;
-            m_WindowsToEngineKeyboard[VK_RCONTROL] = EDwarframeKeyCodes::DF_KEY_RIGHT_CTRL;
-            m_WindowsToEngineKeyboard[VK_LMENU] = EDwarframeKeyCodes::DF_KEY_LEFT_ALT;
-            m_WindowsToEngineKeyboard[VK_RMENU] = EDwarframeKeyCodes::DF_KEY_RIGHT_ALT;
-
             m_WindowsToEngineKeyboard[VK_OEM_1] = EDwarframeKeyCodes::DF_KEY_SEMICOLON;
             m_WindowsToEngineKeyboard[VK_OEM_PLUS] = EDwarframeKeyCodes::DF_KEY_PLUS;
             m_WindowsToEngineKeyboard[VK_OEM_COMMA] = EDwarframeKeyCodes::DF_KEY_COMMA;

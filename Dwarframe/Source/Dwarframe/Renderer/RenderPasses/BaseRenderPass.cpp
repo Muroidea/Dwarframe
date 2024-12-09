@@ -119,7 +119,7 @@ namespace Dwarframe {
 			CommandList->SetGraphicsRoot32BitConstant(0, i, 0);
 			CommandList->SetGraphicsRootConstantBufferView(3, m_MeshConstantsBuffer->GetGPUVirtualAddress());
 			BindMeshletData(i);
-			CommandList->DispatchMesh(m_Renderables[i]->GetMesh()->GetSubmesh(0).Meshlets.size(), 1, 1);
+			CommandList->DispatchMesh(m_Renderables[i]->GetMesh()->GetSubmesh(0).GetLODNumOfMeshlets(), 1, 1);
 		}
 	}
 
@@ -373,28 +373,25 @@ namespace Dwarframe {
 		uint64 SizeInBytes;
 		std::wstring DebugName;
 
-		SizeInBytes = InSubmesh.NumOfVertices * InSubmesh.Attributes.GetVertexStrideInBytes();
+		SizeInBytes = InSubmesh.GetLODNumOfVertices(0) * InSubmesh.Attributes.GetVertexStrideInBytes();
 		DebugName = L"MeshVerticesBuffer";
 		m_MeshVerticesBuffer.push_back(new Buffer(Device, GetSizeBufferAligned(SizeInBytes), DebugName));
-		m_UploadBuffer->SubmitDataToUpload(m_MeshVerticesBuffer.back(), &InSubmesh.MeshVertices[0], SizeInBytes);
-		
+		m_UploadBuffer->SubmitDataToUpload(m_MeshVerticesBuffer.back(), InSubmesh.GetLODVertices(0), SizeInBytes);
 
-		SizeInBytes = InSubmesh.Meshlets.size() * sizeof(Submesh::Meshlet);
+		SizeInBytes = InSubmesh.GetLODNumOfMeshlets(0) * sizeof(Submesh::Meshlet);
 		DebugName = L"MeshletsBuffer";
 		m_MeshletsBuffer.push_back(new Buffer(Device, GetSizeBufferAligned(SizeInBytes), DebugName));
-		m_UploadBuffer->SubmitDataToUpload(m_MeshletsBuffer.back(), reinterpret_cast<void*>(InSubmesh.Meshlets.data()), SizeInBytes);
+		m_UploadBuffer->SubmitDataToUpload(m_MeshletsBuffer.back(), reinterpret_cast<void*>(InSubmesh.GetLODMeshlets(0)), SizeInBytes);
 
-
-		SizeInBytes = InSubmesh.MeshletVertexIndices.size() * sizeof(uint32);
+		SizeInBytes = InSubmesh.GetLODNumOfMeshletVertexIndices(0) * sizeof(uint32);
 		DebugName = L"MeshletVertexIndicesBuffer";
 		m_MeshletVertexIndicesBuffer.push_back(new Buffer(Device, GetSizeBufferAligned(SizeInBytes), DebugName));
-		m_UploadBuffer->SubmitDataToUpload(m_MeshletVertexIndicesBuffer.back(), reinterpret_cast<void*>(InSubmesh.MeshletVertexIndices.data()), SizeInBytes);
+		m_UploadBuffer->SubmitDataToUpload(m_MeshletVertexIndicesBuffer.back(), reinterpret_cast<void*>(InSubmesh.GetLODMeshletVertexIndices(0)), SizeInBytes);
 
-
-		SizeInBytes = InSubmesh.MeshletTriangles.size() * sizeof(Submesh::MeshletTriangle);
+		SizeInBytes = InSubmesh.GetLODNumOfMeshletTriangles(0) * sizeof(Submesh::MeshletTriangle);
 		DebugName = L"MeshletTrianglesBuffer";
 		m_MeshletTrianglesBuffer.push_back(new Buffer(Device, GetSizeBufferAligned(SizeInBytes), DebugName));
-		m_UploadBuffer->SubmitDataToUpload(m_MeshletTrianglesBuffer.back(), reinterpret_cast<void*>(InSubmesh.MeshletTriangles.data()), SizeInBytes);
+		m_UploadBuffer->SubmitDataToUpload(m_MeshletTrianglesBuffer.back(), reinterpret_cast<void*>(InSubmesh.GetLODMeshletTriangles(0)), SizeInBytes);
 	}
 
 	void BaseRenderPass::BindMeshletData(uint32 BufferID)
